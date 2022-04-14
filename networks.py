@@ -164,13 +164,12 @@ class get_fc(nn.Module):
         # output = self.dense_1(output)
 
         output = self.dense_2(output)
-        output0 = output
 
         output = self.dense_3(output)
 
         # output = self.dense_4(output)
 
-        return output0, output
+        return output
 
 class classifier(nn.Module):
     def __init__(self, submodule, extracted_layers):
@@ -185,13 +184,12 @@ class classifier(nn.Module):
         )
         self.fc1 = nn.Sequential(
             nn.Linear(in_features=64,out_features=16,bias=True),
-            nn.Linear(in_features=16,out_features=2,bias=True)
+            nn.Linear(in_features=16,out_features=3,bias=True)
         )
 
     def forward(self, x):
         outputs = []
         for name, module in self.submodule._modules.items():
-        # for name, module in self._modules.items():
             if name is "fc": 
                 x = x.view(x.size(0), -1)
             x = module(x)

@@ -83,8 +83,10 @@ class ODIRDataset(Dataset):
         A_label = file.split('/')[-1].split('_')[0]
         if A_label == 'normal':
             label = 0
-        else:
+        elif A_label == 'dry':
             label = 1
+        else:
+            label = 2
         return img_transform, label
     def __len__(self):
         return len(self.file_path)
@@ -113,41 +115,14 @@ class STAREDataset(Dataset):
         A_label = file.split('/')[-1].split('_')[0]
         if A_label == 'normal':
             label = 0
-        else:
+        elif A_label == 'dry':
             label = 1
+        else:
+            label = 2
         return img_transform, label
     def __len__(self):
         return len(self.file_path)
 
-class iCHALLENGEDataset(Dataset):
-    def __init__(self, root_dir, img_size, loader):
-
-        self.path = os.path.join(root_dir, loader)
-
-        self.file_path = sorted(make_dataset(self.path))
-
-        self.transform = transforms.Compose([
-            transforms.Resize(img_size), 
-            transforms.CenterCrop(224), 
-            transforms.ToTensor(), 
-            transforms.Normalize(
-                mean=[0.485, 0.456, 0.406], 
-                std=[0.229, 0.224, 0.225]
-            )])
-        
-
-    def __getitem__(self, index):
-        file = self.file_path[index]
-        img = Image.open(file).convert('RGB')
-        img_transform = self.transform(img)
-        A_label = file.split('/')[-1].split('_')[0]
-        if A_label == 'normal':
-            label = 0
-        else:
-            label = 1
-        return img_transform, label
-    def __len__(self):
-        return len(self.file_path)
 
 IMG_EXTENSIONS = [
     '.jpg', '.JPG', '.jpeg', '.JPEG',
